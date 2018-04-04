@@ -136,7 +136,8 @@ namespace PecaRecFileJoin
                 if(filesize < 100000 )
                 {
                     DialogResult result = MessageBox.Show("以下のファイルは100KB以下です。削除しますか？ \r\n" 
-                        + System.IO.Path.GetFileName(file)
+                        + System.IO.Path.GetFileName(file) + "\r\n"
+                        + string.Format("file size = {0} KB", filesize / 1000)
                         , "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if(result == DialogResult.Yes )
                     {
