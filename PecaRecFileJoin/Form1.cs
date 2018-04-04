@@ -127,19 +127,30 @@ namespace PecaRecFileJoin
                 }
             }
 
-            // ディレクトリまでのパスに'が含まれている(ffmpegのinput.txt作成で都合が悪い)
-            //foreach(string file in files )
-            //{
-            //    if( System.IO.Path.GetDirectoryName(file).Contains('\'') )
-            //    {
-            //        MessageBox.Show("ディレクトリパスに'が含まれています", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return;
-            //    }
-            //}
+            // 100kバイト(100000バイト)以下のファイルは削除確認ダイアログを出す
+            bool bDeleted = false;
+            foreach(string file in files )
+            {
+                System.IO.FileInfo fi = new System.IO.FileInfo(file);
+                long filesize = fi.Length;
+                if(filesize < 100000 )
+                {
+                    DialogResult result = MessageBox.Show("以下のファイルは50KB以下です。削除しますか？ \r\n" 
+                        + System.IO.Path.GetFileName(file)
+                        , "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if(result == DialogResult.Yes )
+                    {
+                        System.Diagnostics.Process p = System.Diagnostics.Process.Start(
+                            @"external-bin\trash.exe", "\"" + file + "\"");
+                        p.WaitForExit();
+                        bDeleted = true;
+                    }
+                }
+            }
+            if(bDeleted) return;
 
             // 完了済みアイテムを削除
             JoinProfileList.RemoveAll(j => j.State != "待機");
-
 
             // 昇順ソート
             Array.Sort(files);
