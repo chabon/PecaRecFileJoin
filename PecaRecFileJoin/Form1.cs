@@ -135,7 +135,7 @@ namespace PecaRecFileJoin
                 long filesize = fi.Length;
                 if(filesize < 100000 )
                 {
-                    DialogResult result = MessageBox.Show("以下のファイルは50KB以下です。削除しますか？ \r\n" 
+                    DialogResult result = MessageBox.Show("以下のファイルは100KB以下です。削除しますか？ \r\n" 
                         + System.IO.Path.GetFileName(file)
                         , "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if(result == DialogResult.Yes )
@@ -190,6 +190,7 @@ namespace PecaRecFileJoin
 
                 // 結合処理開始
                 jp.State = "処理中";
+                UpdateJoinProfileListView();
                 if(jp.Extension == ".wmv" )
                 {
                     JoinUtil.JoinWmvFiles(jp);
